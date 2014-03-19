@@ -113,7 +113,7 @@ order by MED.MODIFIEDDATETIME desc
 
 
 --List of Models That has been updated--
-select L.Name, SYSMM.DISPLAYNAME, MED.ModelId
+select L.Name, SYSMM.DISPLAYNAME, MED.ModelId, MAX(MED.MODIFIEDDATETIME) as LastModified
 from ModelElement ME
 join ModelElementData MED on MED.ElementHandle = ME.ElementHandle
 join ElementTypes ET on ET.ElementType = ME.ElementType
