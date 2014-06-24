@@ -1,0 +1,153 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: TablesToDeleteSysDatabaseTrans unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #TablesToDeleteSysDatabaseTrans
+    #// ------------------------------------------------
+    #// Description:     Job to create a CSV file with tables that will be deleted
+    #//                  using Class\SysDatabaseTransDelete
+    #// Creator:         Shashi Sadasivan
+    #// Creation date:   24.06.14
+    #// -----------------------------------------------------------------
+    #// -----------------------------------------------------------------
+    #static server void TablesToDeleteSysDatabaseTrans(Args _args)
+    #{
+    #    SysDictTable    sysDictTable;
+    #    TableGroup      tableGroup;
+    #    str             outLine;
+    #    str filename    = @'C:\temp\TablesToDeleteOrNot.csv'; //File name that will be created and written into
+    #    Set             permissionSet = new Set(Types::Class);
+    #    Dictionary  dictionary = new Dictionary();
+    #
+    #
+    #    System.Text.StringBuilder strBld = new System.Text.StringBuilder();
+    #    TableId     tableId = dictionary.tableNext(0);
+    #
+    #    int recsToWrite = 0; // make this zero to run to the end
+    #    int recswaiting = 0;
+    #
+    #    permissionSet.add(new AifChangeTrackingPermission());
+    #    permissionSet.add(new FileIOPermission(filename, 'rw'));
+    #
+    #    CodeAccessPermission::assertMultiple(permissionSet);
+    #
+    #    strBld.AppendLine('Table Group,Company Specific,Table name,SQL Table Name,Will be deleted,Row Count');
+    #    while (tableId)
+    #    {
+    #        sysDictTable = new SysDictTable(tableId);
+    #
+    #        if(sysDictTable
+    #            && !sysDictTable.isView() && !sysDictTable.isMap() && !sysDictTable.isTmp()
+    #            && !sysDictTable.isTempDb())
+    #        {
+    #            tableGroup = sysDictTable.tableGroup();
+    #            outLine = strFmt('%1', tableGroup); //Table group
+    #            outLine += "," + (sysDictTable.dataPrCompany() ? 'Company' : 'Global');//Company specific
+    #
+    #            outLine += "," + sysDictTable.name(); //Table name
+    #            outline += "," + sysDictTable.name(DbBackend::Sql); //SQL Table name
+    #
+    #            //Will be deleted
+    #            if(sysDictTable.dataPrCompany())
+    #            {
+    #                switch(tableGroup)
+    #                {
+    #                    case TableGroup::Transaction:
+    #                    case TableGroup::WorksheetHeader:
+    #                    case TableGroup::WorksheetLine:
+    #                        switch(sysDictTable.id())
+    #                        {
+    #                            case tablenum(CustCollectionLetterLine):
+    #                            case tablenum(InventDim):
+    #                            case tablenum(DocuRef):
+    #                            case tablenum(DirPartyRelationship) :
+    #                                outLine += ",No";
+    #                                break;
+    #                            default:
+    #                                outLine += ",Yes";
+    #                                break;
+    #                        }
+    #                        break;
+    #                    default:
+    #                        switch(sysDictTable.id())
+    #                        {
+    #                            case tablenum(SalesTable):
+    #                            case tablenum(PurchTable):
+    #                            case tablenum(WMSPallet):
+    #                            case tablenum(CustInterestJour):
+    #                            case tablenum(CustCollectionLetterJour):
+    #                            case tablenum(ProjControlPeriodTable):
+    #                            case tablenum(ProjInvoiceJour):
+    #                            case tablenum(ProjJournalTable):
+    #                            case tablenum(PdsRebateTable):
+    #                            case tablenum(PdsBatchAttributes):
+    #                                outLine += ",Yes";
+    #                                break;
+    #                            default:
+    #                                outLine += ",No";
+    #                                break;
+    #                        }
+    #                }
+    #            }
+    #            else
+    #            {
+    #                //else its Global
+    #                switch(tableGroup)
+    #                {
+    #                    case TableGroup::Transaction:
+    #                    case TableGroup::TransactionHeader :
+    #                    case TableGroup::WorksheetHeader:
+    #                    case TableGroup::WorksheetLine:
+    #                        switch(sysDictTable.id())
+    #                        {
+    #                            case tablenum(SpecTrans):
+    #                            case tableNum(GeneralJournalEntry) :
+    #                            case tableNum(GeneralJournalAccountEntry) :
+    #                                outLine += ",Yes";
+    #                                break;
+    #                            default:
+    #                                outLine += ",No";
+    #                                break;
+    #                        }
+    #                        break;
+    #                    default:
+    #                        outLine += ",No";
+    #                        break;
+    #                }
+    #            }
+    #            if(sysDictTable.id() == tableNum(AifSqlCdcEnabledTables))
+    #                outLine += ",xxx";
+    #            try
+    #            {
+    #                outLine += "," + strFmt('%1', sysDictTable.recordCount(true));
+    #            }
+    #            catch
+    #            {
+    #                info(sysDictTable.name());
+    #                outLine += ",xxx";
+    #            }
+    #            strBld.AppendLine(outLine);
+    #            recswaiting ++;
+    #        }
+    #
+    #        tableId = dictionary.tableNext(tableId);
+    #
+    #        if(recstowrite != 0 && recswaiting >= recsToWrite)
+    #            break;
+    #    }
+    #
+    #    //Write to a file
+    #    System.IO.File::WriteAllText(filename, strBld.ToString());
+    #}
+  ENDSOURCE
+  PROPERTIES
+    Origin              #{090486B2-0081-4889-8FA7-64BE01A1A27D}
+  ENDPROPERTIES
+  
+
+***Element: END
