@@ -17,7 +17,7 @@ qp.query_plan
 FROM sys.dm_exec_query_stats qs
 CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) qt
 CROSS APPLY sys.dm_exec_query_plan(qs.plan_handle) qp
-where last_execution_time > '2016-07-22 15:30:00.000' and qp.dbid = DB_ID(N'DynamicsAX_AUDCPT')
+where last_execution_time > '2016-07-22 15:30:00.000' and qp.dbid = DB_ID(N'DynamicsAX')
 ORDER BY qs.total_logical_reads DESC -- logical reads
 -- ORDER BY qs.total_logical_writes DESC -- logical writes
 -- ORDER BY qs.total_worker_time DESC -- CPU time
