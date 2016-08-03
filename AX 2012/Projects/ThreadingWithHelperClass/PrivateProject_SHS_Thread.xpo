@@ -1,0 +1,441 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : SHSTestItem unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #SHSTestItem
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #SHSTestItem
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      Origin              #{268E1C9D-119B-4E64-A9AF-2B3F4F0DE5FC}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #conItemStr
+        STRING
+        PROPERTIES
+          Name                #conItemStr
+          Table               #SHSTestItem
+          Origin              #{7C6BAF0B-94AE-4F84-A041-1168494E8DAD}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #itemrecid
+        INT64
+        PROPERTIES
+          Name                #itemrecid
+          Table               #SHSTestItem
+          Origin              #{57E8B698-8EDB-4DE7-A9EF-040251BCEF8C}
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      SOURCE #clearAll
+        #public static void clearAll()
+        #{
+        #    SHSTestItem testItem;
+        #
+        #    ttsBegin;
+        #    delete_from testItem;
+        #    ttsCommit;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #getNumRecords
+        #public static int getNumRecords()
+        #{
+        #    SHSTestItem testitem;
+        #    int records = 0;
+        #
+        #    select count(RecId) from testitem;
+        #
+        #    records = int642int(testitem.RecId);
+        #
+        #    return records;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: SHSCallThread unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #SHSCallThread
+    #static void SHSCallThread(Args _args)
+    #{
+    #
+    #
+    #    // ClassId c1, c2;
+    #    // CachedHow = classNum(SHSThreadBase
+    #    Set s = new Set(Types::Class);
+    #
+    #    SHSThreadTest threadTest = new SHSThreadTest();
+    #    //threadTest.StartThread();
+    #
+    #
+    #    SHSTestItem::clearAll();
+    #
+    #    threadTest.run();
+    #
+    #    info(strFmt("Records created: %1", SHSTestItem::getNumRecords()));
+    #}
+  ENDSOURCE
+  PROPERTIES
+    Origin              #{23404A4C-D34F-405E-BD72-3810A22F7466}
+  ENDPROPERTIES
+  
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SHSThreadTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SHSThreadTest
+    PROPERTIES
+      Name                #SHSThreadTest
+      Extends             #SHSThreadBase
+      Origin              #{358E6707-9BA6-49E3-9C4F-1A71658D5374}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #class SHSThreadTest extends SHSThreadBase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new()
+        #{
+        #    super();
+        #    this.parmNumThreads(20);
+        #}
+      ENDSOURCE
+      SOURCE #StartThread
+        #protected void StartThread()
+        #{
+        #    Container   threadData;
+        #    InventTable inventTable;
+        #
+        #    int counter;
+        #
+        #    int timeSec;
+        #    System.Diagnostics.Stopwatch st = new System.Diagnostics.Stopwatch();
+        #    st.Start();
+        #
+        #    while select InventTable
+        #    {
+        #        // build a container to identify what is being sent
+        #        threadData = [inventTable.RecId];
+        #
+        #        // each of the containers sent will be processed
+        #        // checing for number of threads is done within this
+        #        // info(strFmt("ii %1", con2Str(threadData)));
+        #        this.createThread(
+        #                threadData,
+        #                staticMethodStr(SHSThreadTest, threadCallTest)
+        #                );
+        #
+        #        counter ++;
+        #        if(counter > 30)
+        #            break;
+        #
+        #
+        #    }
+        #
+        #    st.Stop();
+        #    timeSec = int642int(st.get_ElapsedMilliseconds());
+        #    timeSec = timeSec / 1000;
+        #    info(strFmt("Total time: %1s", timeSec));
+        #}
+      ENDSOURCE
+      SOURCE #threadCallTest
+        #public static void threadCallTest(Thread thread)
+        #{
+        #    SHSTestItem testItem;
+        #    container threadData = thread.getInputParm();
+        #
+        #    RecId       itemRecId;
+        #
+        #    // put a delay here
+        #    sleep(10 * 1000); // 10 seconds
+        #    try
+        #
+        #    {
+        #        ttsBegin;
+        #        testItem.clear();
+        #
+        #        itemRecId = conPeek(threadData, 1);
+        #
+        #        testItem.conItemStr = strFmt("%1", conPeek(threadData, 1));
+        #        // testItem.conThreadStr = strFmt("%1", threadData);
+        #
+        #        testItem.insert();
+        #        ttsCommit;
+        #    }
+        #    catch
+        #    {
+        #        ttsBegin;
+        #
+        #        testItem.clear();
+        #        testItem.conItemStr = "error";
+        #        testItem.insert();
+        #
+        #        ttsCommit;
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SHSThreadBase unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SHSThreadBase
+    PROPERTIES
+      Name                #SHSThreadBase
+      Origin              #{2A40B1EB-10FD-4E4D-B855-48861BB875C2}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #abstract class SHSThreadBase
+        #{
+        #    Set threadSet;
+        #    int maxthreads;
+        #}
+      ENDSOURCE
+      SOURCE #createThread
+        #protected void createThread(container threadData, str staticMethodToCall)
+        #{
+        #    Thread thread = new Thread();
+        #    ExecutePermission perm;
+        #
+        #
+        #    perm = new ExecutePermission();
+        #    perm.assert();
+        #
+        #    // check if we can proceed
+        #    this.isFreeToCallThread();
+        #
+        #    // create thread
+        #    thread.setInputParm(threadData);
+        #    if(thread)
+        #    {
+        #        thread.removeOnComplete(true);
+        #
+        #
+        #        // Call the class here
+        #        // TODO: somehow move this across to the
+        #        //thread.run(classnum(SHSThreadBase), staticMethodStr(SHSThreadBase, threadCall));
+        #        thread.run(classIdGet(this), staticMethodToCall);
+        #
+        #        // thread.run( classIdGet(this), staticMethodStr(classIdGet(this), threadCall));
+        #
+        #        // add to set
+        #        threadSet.add(thread);
+        #        // thread.wait();
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #isFreeToCallThread
+        #private boolean isFreeToCallThread(boolean _waitForAll = false)
+        #{
+        #    boolean result = false;
+        #    Thread curThread;
+        #    SetEnumerator enumerator;
+        #
+        #    // only if all threads are used, or we wait for all thread to finish
+        #    if(threadSet.elements() == maxthreads
+        #        || _waitForAll)
+        #    {
+        #
+        #        // wait for the first thread to finish
+        #        do
+        #        {
+        #            enumerator = threadSet.getEnumerator();
+        #            while(enumerator.moveNext())
+        #            {
+        #                curThread = enumerator.current();
+        #                // 0 = Not run yet
+        #                // 1 = Executing
+        #                // > 1 (i think 2 is finished, 3 aborted / failed)
+        #                if(curThread.status() > 1)
+        #                {
+        #                    threadSet.remove(curThread);
+        #
+        #                    result = true;
+        #                    // then break
+        #                    break;
+        #                }
+        #
+        #            }
+        #        }while(result == false
+        #            && (_waitForAll == false
+        #                    || (_waitForAll == true && threadSet.elements() <= 0) // until all elements are removed
+        #                )
+        #              );
+        #
+        #    }
+        #
+        #    return result;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new()
+        #{
+        #    threadSet = new Set(Types::Class);
+        #    // Change the aximum threads that will run in parallel here
+        #    maxthreads = 10;
+        #}
+      ENDSOURCE
+      SOURCE #parmNumThreads
+        #protected final int parmNumThreads(int _numThreads = maxThreads)
+        #{
+        #    maxThreads = _numThreads;
+        #    return maxThreads;
+        #}
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    try{
+        #    this.StartThread();
+        #    this.waitForFinish();
+        #    }
+        #    catch
+        #    {
+        #        warning('uncaught exception');
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #StartThread
+        #// First called
+        #// Always override this
+        #protected abstract void StartThread()
+        #{
+        #
+        #}
+      ENDSOURCE
+      SOURCE #waitForFinish
+        #protected final void waitForFinish()
+        #{
+        #    this.isFreeToCallThread(true);
+        #}
+      ENDSOURCE
+      SOURCE #Thread
+        #public static void Thread(Thread myThread)
+        #{
+        #    container threadData;
+        #
+        #    threadData = myThread.getInputParm();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #threadCall
+        #public static void threadCall(Thread thread)
+        #{
+        #    SHSTestItem testItem;
+        #    container threadData = thread.getInputParm();
+        #
+        #    try
+        #    {
+        #        ttsBegin;
+        #        testItem.clear();
+        #
+        #        testItem.conItemStr = strFmt("%1", conPeek(threadData, 1));
+        #        // testItem.conThreadStr = strFmt("%1", threadData);
+        #
+        #        testItem.insert();
+        #        ttsCommit;
+        #    }
+        #    catch
+        #    {
+        #        ttsBegin;
+        #
+        #        testItem.clear();
+        #        testItem.conItemStr = "error";
+        #        testItem.insert();
+        #
+        #        ttsCommit;
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: PRN
+
+; Microsoft Dynamics AX Project : SHS_Thread unloaded
+; --------------------------------------------------------------------------------
+  PROJECTVERSION 2
+  
+  PROJECT #SHS_Thread
+  PRIVATE
+  PROPERTIES
+    Name                #SHS_Thread
+    Origin              #{0F9C8B68-D867-4B01-8A0E-C4E6AF75ECBB}
+  ENDPROPERTIES
+  
+    PROJECTCLASS ProjectNode
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 44
+      UTILOBJECTID 104665
+      NODETYPE 204
+      NAME #SHSTestItem
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 5
+      UTILOBJECTID 0
+      NODETYPE 215
+      NAME #SHSCallThread
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1025102
+      NODETYPE 329
+      NAME #SHSThreadTest
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1025101
+      NODETYPE 329
+      NAME #SHSThreadBase
+    ENDNODE
+  ENDPROJECT
+  
+
+***Element: END
