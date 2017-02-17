@@ -1,0 +1,9 @@
+#Get List of models
+Get-AXModel -Server <DBServer> -Database <DynamicsAX_model> | Select modelId,name,description,version
+
+#Install model
+Install-AxModel -Server <DBServer> -Database <DynamicsAX_model> -Conflict push -File <C:\filepath.axmodel>
+
+#Compile application
+--From the server\bin forlder (Ad Admin)
+AXBuild.exe xppcompileall /v /w=10 /s=05 /a="C:\Program Files (x86)\Microsoft Dynamics AX\60\Client\Bin"
