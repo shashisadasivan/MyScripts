@@ -1,3 +1,4 @@
+--SQL 2016 onwards
 SELECT top 10
 			q.query_id
               ,q.query_text_id
