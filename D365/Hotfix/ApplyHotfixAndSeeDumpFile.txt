@@ -1,0 +1,8 @@
+-- Download Procdump: https://docs.microsoft.com/en-us/sysinternals/downloads/procdump
+procdump -e 1 -f "Exception" SCDPBundleInstall.exe -w -ma
+
+-- Import the hotfix file using:
+K:\AosService\PackagesLocalDirectory\Bin>SCDPBundleInstall.exe -install -packagepath="C:\Users\Userbd8e9acec39\Downloads\MicrosoftDynamicsAX_KB4340413\HotfixPackageBundle.axscdppkg" -metadatastorepath="K:\AosService\PackagesLocalDirectory"
+
+-- this will create a dmp file (See window for procdump)
+-- run dump file, should open visual studio, debug in mixed mode and you can see the stack trace and the values involved in it
