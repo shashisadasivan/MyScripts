@@ -2,6 +2,9 @@
 procdump -e 1 -f "Exception" SCDPBundleInstall.exe -w -ma
 
 -- Import the hotfix file using:
+-- https://docs.microsoft.com/en-us/dynamics365/unified-operations/dev-itpro/migration-upgrade/install-metadata-hotfix-package
+-- NOTE: use the link above to get the command parameters to use Source control
+-- Following command does not include files in source control
 K:\AosService\PackagesLocalDirectory\Bin>SCDPBundleInstall.exe -install -packagepath="C:\Users\Userbd8e9acec39\Downloads\MicrosoftDynamicsAX_KB4340413\HotfixPackageBundle.axscdppkg" -metadatastorepath="K:\AosService\PackagesLocalDirectory"
 
 -- this will create a dmp file (See window for procdump)
