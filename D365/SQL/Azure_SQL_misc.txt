@@ -1,0 +1,10 @@
+#Set firewall policy on database (eg UAT debugging from dev)
+https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-set-database-firewall-rule-azure-sql-database?view=azuresqldb-current
+
+-- Create database-level firewall setting for only IP 130.130.23.23 (this is the IP of the DEV machine)
+--- Run the SQL script on the UAT machine on the DB that needs to be debugged
+EXECUTE sp_set_database_firewall_rule N'D365 DEV', '130.130.23.23', '130.130.23.23';
+
+-- List firewall rules (run in that Database)
+-- https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-database-firewall-rules-azure-sql-database?view=azuresqldb-current
+select * from sys.database_firewall_rules
