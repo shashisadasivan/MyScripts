@@ -1,0 +1,6 @@
+1. Find IP address of DEV system: http://www.ip-adress.eu/
+2. Log into UAT system > Open SSMS > new Query on master database
+3. Run script to allow access to DEV system accessing the database
+   exec sp_set_firewall_rule N'DEV_01', '<dev01.ip.address.here>', '<dev01.ip.address.here>'
+4. Follow the document: https://docs.microsoft.com/en-us/dynamics365/unified-operations/dev-itpro/dev-tools/debug-x-issue-against-copy-of-production
+   Skip giving one time access to DEV
