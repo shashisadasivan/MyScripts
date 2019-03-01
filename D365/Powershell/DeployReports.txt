@@ -1,0 +1,8 @@
+// OPen POwersheell and navigate to follwoing folder
+PS K:\AosService\PackagesLocalDirectory\Plugins\AxReportVmRoleStartupTask>
+
+//Deploy all reports
+.\DeployAllReportsToSsrs.ps1 -PackageInstallLocation K:\AosService\PackagesLocalDirectory\
+
+//Deploy all reports in a Model
+.\DeployAllReportsToSsrs.ps1 -Module AppSuiteModernDesigns -PackageInstallLocation K:\AosService\PackagesLocalDirectory\
