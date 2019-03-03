@@ -24,9 +24,12 @@ WHERE
     AND t.is_ms_shipped = 0
     AND i.OBJECT_ID > 255
 	and p.rows > 0
-	--and t.name like '%Staging'
+	--and (t.name like '%Staging' and t.name not in ('CUSTAGING'))
 GROUP BY
     t.Name, s.Name, p.Rows
 ORDER BY
 	TotalSpaceKB desc
     --t.Name
+
+--Get the size of the database
+--EXEC sp_spaceused;
