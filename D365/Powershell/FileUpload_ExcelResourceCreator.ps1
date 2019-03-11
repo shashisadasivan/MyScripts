@@ -3,6 +3,8 @@
 # With this tool, enter the File Path e.g. c:\tempFolder\File1.txt to the FileName column and run this tool
 # This tool will move the file to the Resources folder in the Target folder with a GUID fileName and update the file name in Excel to the same GUID
 # The excel file is also saved into the Target folder
+
+# Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
 Param(
 
    [Parameter(Mandatory=$true)] #We need the full path of the excel file
@@ -10,6 +12,9 @@ Param(
 
    [Parameter(Mandatory=$true)] #Full path of target folder (where the manifest file is)
    [string]$TargetFolderPath,
+
+   [Parameter(Mandatory=$true)] #Entity name to create a folder in the Target\resources directory
+   [string]$TargetEntity,
 
    [Parameter(Mandatory=$false)]
    [boolean]$FirstLineHasHeader = $true, #Is the first line of excel header
@@ -29,6 +34,7 @@ $fileName = ""
 $fileType = ""
 $filePath = ""
 $TargetFolderPathResources = "$TargetFolderPath\Resources"
+$TargetFolderPathResourcesEntity = "$TargetFolderPathResources\$TargetEntity"
 
 Function closeExcelFile() {
     $excelFileName = [System.IO.Path]::GetFileName($excelFilePath)
@@ -47,6 +53,10 @@ Function checkResourceFolderExists() {
     #Clean the resource folder
     #Get-ChildItem -Path $TargetFolderPathResources -Include * -File -Recurse | foreach { $_.Delete() }
     Remove-Item "$TargetFolderPathResources\*" -Recurse -Force
+
+    Write-Output "Create entity folder in resource folder if not exists"
+    New-Item -Force -ItemType directory -Path $TargetFolderPathResourcesEntity | Out-Null #out-Null will keep this operation silent
+    Remove-Item "$TargetFolderPathResourcesEntity\*" -Recurse -Force
 }
 
 Function processFile ([string]$filePathToPackage) {
@@ -58,7 +68,8 @@ Function processFile ([string]$filePathToPackage) {
     $script:fileName = [System.IO.Path]::GetFileNameWithoutExtension($filePathToPackage)
     $script:fileType = [System.IO.Path]::GetExtension($filePathToPackage).Replace(".", "")
 
-    Copy-Item -Path $filePathToPackage -Destination "$script:TargetFolderPathResources\$filePath" -Force #dont open a dialog for this
+    #Copy-Item -Path $filePathToPackage -Destination "$script:TargetFolderPathResources\$filePath" -Force #dont open a dialog for this
+    Copy-Item -Path $filePathToPackage -Destination "$script:TargetFolderPathResourcesEntity\$filePath" -Force #dont open a dialog for this
 
     #Write-Output $script:fileName $script:fileType $script:filePath
 }
@@ -104,6 +115,7 @@ for(; $intRow -le $rows; $intRow++){
 
 
 closeExcelFile
+#Write-Output $ColumnAttachmentFilePath
 
 Write-Output "Complete"
 
