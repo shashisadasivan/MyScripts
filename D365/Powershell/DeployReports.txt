@@ -1,5 +1,5 @@
-// OPen POwersheell and navigate to follwoing folder
-PS K:\AosService\PackagesLocalDirectory\Plugins\AxReportVmRoleStartupTask>
+// OPen POwersheell and navigate to following folder
+cd K:\AosService\PackagesLocalDirectory\Plugins\AxReportVmRoleStartupTask
 
 //Deploy all reports
 .\DeployAllReportsToSsrs.ps1 -PackageInstallLocation K:\AosService\PackagesLocalDirectory\
