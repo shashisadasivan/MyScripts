@@ -1,0 +1,4 @@
+Change YOUR_TENANT and you will be presented with a JSON with the tenant id in there
+https://login.windows.net/YOUR_TENANT.onmicrosoft.com/.well-known/openid-configuration
+
+# https://stackoverflow.com/a/26386318/258053
