@@ -97,7 +97,8 @@ Function processFile ([string]$filePathToPackage) {
     $script:filePath = ""
 
     $script:filePath = [guid]::NewGuid().ToString("B")
-    $script:fileName = [System.IO.Path]::GetFileNameWithoutExtension($filePathToPackage)
+	$script:fileName = [System.IO.Path]::GetFileName($filePathToPackage)
+    #$script:fileName = [System.IO.Path]::GetFileNameWithoutExtension($filePathToPackage)
     $script:fileType = [System.IO.Path]::GetExtension($filePathToPackage).Replace(".", "")
 
     #Copy-Item -Path $filePathToPackage -Destination "$script:TargetFolderPathResources\$filePath" -Force #dont open a dialog for this
