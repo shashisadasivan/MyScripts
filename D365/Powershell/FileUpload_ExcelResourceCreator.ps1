@@ -1,7 +1,7 @@
 # Powershell script for File attachment upload to D365
 # With entities that use the DocuRefEntity, we canupload FirstLineHasHeader
 # With this tool, enter the File Path e.g. c:\tempFolder\File1.txt to the FileName column and run this tool
-# This tool will move the file to the Resources folder in the Target folder with a GUID fileName and update the file name in Excel to the same GUID
+# This tool will move the file to the Resources folder in the Target folder with a GUID fileName and update the file name in Excel to the same GUID #Shashi Sadasivan
 # The excel file is also saved into the Target folder
 
 # Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
