@@ -1,10 +1,35 @@
-# Powershell script for File attachment upload to D365
-# With entities that use the DocuRefEntity, we canupload FirstLineHasHeader
-# With this tool, enter the File Path e.g. c:\tempFolder\File1.txt to the FileName column and run this tool
-# This tool will move the file to the Resources folder in the Target folder with a GUID fileName and update the file name in Excel to the same GUID #Shashi Sadasivan
-# The excel file is also saved into the Target folder
-
-# Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
+<#
+.SYNOPSIS
+	Powershell script for File attachment upload to D365
+.DESCRIPTION
+	Uploading documents to D365 Finance requires the files to be send in a folder. Each file requires to be named as a guid and that guid is to exist in the excel sheet.
+	This tool reduces the work of having to move a file, rename the file to a guid.
+	All you need to do it fill the excel file with the full file path and assign it to the key that the file gets uploaded to. This tool will take crea of the rest
+.PARAMETER ExcelFilePath
+	Specifies path to the excel file to be uploaded. The excel file will be filled with the file location (in UNC i.e. C:\myfolder\myfile.txt)
+.PARAMETER TargetFolderPath
+	Specifies the folder where the end Excel file and the attached files will be located
+	You will need to fip this folder up to upload it to D365
+.PARAMETER TargetEntity
+	The entity name that this will be uploaded to
+.PARAMETER FirstLineHasHeader
+	This will ignore the first line
+	Default value = true
+.PARAMETER ColumnAttachmentFileName
+    The location of the File name column from the left (Starting at 1) in the excel file.
+	This field will be overritten so best to keep it empty
+.PARAMETER ColumnAttachmentFileType
+    The location of the File type column from the left (Starting at 1) in the excel file.
+	This field will be overritten so best to keep it empty
+.PARAMETER ColumnAttachmentFilePath
+	The location of the File path column from the left (Starting at 1) in the excel file.
+	This should contain the entire file path i.e. c:\tempFolder\File1.txt
+.EXAMPLE
+	Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
+.NOTES
+	Author: Shashi Sadasivan
+	Date:   May 22, 2020
+#>
 Param(
 
    [Parameter(Mandatory=$true)] #We need the full path of the excel file
@@ -30,6 +55,13 @@ Param(
 
 ) #end param
 
+	# Powershell script for File attachment upload to D365
+	# With entities that use the DocuRefEntity, we canupload FirstLineHasHeader
+	# With this tool, enter the File Path e.g. c:\tempFolder\File1.txt to the FileName column and run this tool
+	# This tool will move the file to the Resources folder in the Target folder with a GUID fileName and update the file name in Excel to the same GUID #Shashi Sadasivan
+	# The excel file is also saved into the Target folder
+	# Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
+	
 $fileName = ""
 $fileType = ""
 $filePath = ""
