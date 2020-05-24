@@ -25,10 +25,10 @@
 	The location of the File path column from the left (Starting at 1) in the excel file.
 	This should contain the entire file path i.e. c:\tempFolder\File1.txt
 .EXAMPLE
-	Example .\FileUpload.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity"
+	Example .\FileUpload_ExcelResourceCreator.ps1 -ExcelFilePath "C:\temp\FileUpload\Released product document attachments1.xlsx" -TargetFolderPath "C:\temp\FileUpload\target" -TargetEntity "This is my Entity" -ColumnAttachmentFileName 10 -ColumnAttachmentFileType 8 -ColumnAttachmentFilePath 12
 .NOTES
 	Author: Shashi Sadasivan
-	Date:   May 22, 2020
+	Date:   March 6, 2019
 #>
 Param(
 
