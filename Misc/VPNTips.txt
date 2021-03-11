@@ -1,0 +1,10 @@
+Some VPN connections will not let you access sites from your system.
+What needs to be done is route only those IP addresses that are specific to the VPN , and split the rest via your router
+
+Source: https://superuser.com/a/1289149/1240303
+1. Untick the option (Note the VPN Name)
+   Select the VPN, Right click > VPN Properties (via Network connections) > Networking Tab > TCP/IPv4 > Properties
+   Advanced > IP Settings Tab > untick "Use default gateway on remote network"
+
+2. Powershell command to add the destination IP Addresses for routing, The connectionName would be the VPN Name from the above step
+Add-VpnConnectionRoute -ConnectionName 'My VPN Connection' -DestinationPrefix 192.168.123.0/24
