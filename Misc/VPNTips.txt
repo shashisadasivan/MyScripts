@@ -8,3 +8,9 @@ Source: https://superuser.com/a/1289149/1240303
 
 2. Powershell command to add the destination IP Addresses for routing, The connectionName would be the VPN Name from the above step
 Add-VpnConnectionRoute -ConnectionName 'My VPN Connection' -DestinationPrefix 192.168.123.0/24
+
+To get list of routes for the VPN:
+(Get-VpnConnection -Name "My VPN Connection").routes
+
+#Remove VPN Connection route
+Remove-VpnConnectionRoute -ConnectionName "My VPN Connection" -DestinationPrefix "192.168.123.0/24" -PassThru
