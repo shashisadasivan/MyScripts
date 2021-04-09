@@ -5,3 +5,5 @@ Clear-D365TableDataFromBacpac -Path D:\bacpac\backup.bacpac -OutputPath D:\bacpa
 Clear-D365TableDataFromBacpac -Path D:\bacpac\backup.bacpac -OutputPath D:\bacpac\backup_New1.bacpac -TableName "dbo.BATCHHISTORY","dbo.DMFSTAGINGEXECUTIONERRORS","dbo.EVENTCUD","dbo.BATCHJOBHISTORY","dbo.DIMENSIONHASHMESSAGELOG","dbo.SECURITYOBJECTHISTORY","dbo.EVENTINBOX"
 
 Clear-D365TableDataFromBacpac -Path D:\bacpac\backup.bacpac -OutputPath D:\bacpac\backup_New1.bacpac -TableName "dbo.DOCUHISTORY","dbo.SYSLASTVALUE","dbo.SOURCEDOCUMENTLINESUBLEDGERJOURERRORLOG","dbo.DMFSTAGINGVALIDATIONLOG","dbo.DMFDEFINITIONGROUPEXECUTIONPROGRESS"
+
+Import-D365Bacpac -ImportModeTier1 -BacpacFile "C:\temp\uat.bacpac" -NewDatabaseName "ImportedDatabase" -MaxParallelism 32 -ShowOriginalProgress
