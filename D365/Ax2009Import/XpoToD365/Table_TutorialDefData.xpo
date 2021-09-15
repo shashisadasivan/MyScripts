@@ -1,0 +1,120 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : TutorialDefData unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #TutorialDefData
+    PROPERTIES
+      Name                #TutorialDefData
+      Label               #@SYS71012
+      TitleField1         #TutorialDefaultDataId
+      TableContents       #Default data
+      TableGroup          #Main
+      PrimaryIndex        #Idx
+      ClusterIndex        #Idx
+      DeveloperDocumentation  #@SYS123439
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #TutorialDefaultDataId
+        STRING
+        PROPERTIES
+          Name                #TutorialDefaultDataId
+          Table               #TutorialDefData
+          ExtendedDataType    
+            ARRAY 
+              #TutorialDefDataId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Description
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #TutorialDefData
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoReport
+        PROPERTIES
+          Name                #AutoReport
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #TutorialDefaultDataId
+          #Description
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #TutorialDefaultDataId
+          #Description
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #Description
+        PROPERTIES
+          Name                #Description
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #Description
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #Identification
+        PROPERTIES
+          Name                #Identification
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #TutorialDefaultDataId
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #Idx
+      PROPERTIES
+        Name                #Idx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #TutorialDefaultDataId
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #exist
+        #public static boolean exist(TutorialDefDataId _id)
+        #{
+        #    return (select tutorialDefData where tutorialDefData.TutorialDefaultDataId == _id).RecId != 0;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END
