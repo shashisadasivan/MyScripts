@@ -12,3 +12,12 @@ Invoke-D365AzCopyTransfer -SourceUri "<sourceURI_SASLink>" -DestinationUri "I:\b
 # Import the bacpac file to the database
 Invoke-D365InstallSqlPackage
 Import-D365Bacpac -ImportModeTier1 -BacpacFile "I:\bacpac\axdb.bacpac" -NewDatabaseName "axdb_new" -MaxParallelism 32 -ShowOriginalProgress -Verbose
+
+# End all services
+Stop-D365Environment -All -Kill -ShowOriginalProgress
+
+# Switch the database to the new one (Change the destinationsuffix according to your own requirements)
+Switch-D365ActiveDatabase -SourceDatabaseName "AXDB_new" -DestinationSuffix "_yyyymmdd"
+
+# Start he AOS service (if certain services like managament reporter are set to manual then it will not be started)
+Start-D365EnvironmentV2 -OnlyStartTypeAutomatic -ShowOriginalProgress
