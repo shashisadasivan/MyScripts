@@ -1,0 +1,14 @@
+# List of commands to be entered in sequence in a Powershell window
+# dependency of d365fo.tools installed in the machine
+
+# Make sure AzCopy is installed
+Invoke-D365InstallAzCopy
+
+# Take a copy of the bacpac file from the Asset library using "Generate SAS link"
+Invoke-D365AzCopyTransfer -SourceUri "<sourceURI_SASLink>" -DestinationUri "I:\bacpac\axdb.bacpac"
+
+## Reduce the bacpac file if required. See ReduceBacpacSize.txt for details
+
+# Import the bacpac file to the database
+Invoke-D365InstallSqlPackage
+Import-D365Bacpac -ImportModeTier1 -BacpacFile "I:\bacpac\axdb.bacpac" -NewDatabaseName "axdb_new" -MaxParallelism 32 -ShowOriginalProgress -Verbose
