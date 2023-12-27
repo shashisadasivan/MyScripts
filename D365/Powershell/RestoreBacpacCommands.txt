@@ -1,23 +1,30 @@
 # List of commands to be entered in sequence in a Powershell window
 # dependency of d365fo.tools installed in the machine
 
+#Set the variables here - Edit to suit your needs
+$dbName = "axdb_sandbox_20231227" # The db that is being downloaded
+
+$dbFilePath = "I:\bacpac\"+$dbName+".bacpac" # the folder where the bacpac will be downloaded to
+
+$oldDbSuffix = "_20231227" # the suffix of the current AxDb database that after the switch is complete
+
 # Make sure AzCopy is installed
 Invoke-D365InstallAzCopy
 
 # Take a copy of the bacpac file from the Asset library using "Generate SAS link"
-Invoke-D365AzCopyTransfer -SourceUri "<sourceURI_SASLink>" -DestinationUri "I:\bacpac\axdb.bacpac"
+Invoke-D365AzCopyTransfer -SourceUri "<sourceURI_SASLink>" -DestinationUri $dbFilePath
 
 ## Reduce the bacpac file if required. See ReduceBacpacSize.txt for details
 
 # Import the bacpac file to the database
 Invoke-D365InstallSqlPackage
-Import-D365Bacpac -ImportModeTier1 -BacpacFile "I:\bacpac\axdb.bacpac" -NewDatabaseName "axdb_new" -MaxParallelism 32 -ShowOriginalProgress -Verbose
+Import-D365Bacpac -ImportModeTier1 -BacpacFile $dbFilePath -NewDatabaseName $dbName -MaxParallelism 32 -ShowOriginalProgress -Verbose
 
 # End all services
 Stop-D365Environment -All -Kill -ShowOriginalProgress
 
 # Switch the database to the new one (Change the destinationsuffix according to your own requirements)
-Switch-D365ActiveDatabase -SourceDatabaseName "AXDB_new" -DestinationSuffix "_yyyymmdd"
+Switch-D365ActiveDatabase -SourceDatabaseName $dbName -DestinationSuffix $oldDbSuffix
 
 # Start he AOS service (if certain services like managament reporter are set to manual then it will not be started)
 Start-D365EnvironmentV2 -OnlyStartTypeAutomatic -ShowOriginalProgress
