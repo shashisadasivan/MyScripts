@@ -3,6 +3,7 @@
 # Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
 
 # Add SQL sserver to the exclusion list
+Add-D365WindowsDefenderRules
 Add-MpPreference -ExclusionPath "C:\Program Files\Microsoft SQL Server"
 
 Add-MpPreference -ExclusionPath "K:\AosService\PackagesLocalDirectory"
