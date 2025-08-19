@@ -7,7 +7,7 @@ SELECT top 10
               ,qp.plan_id
               ,qp.query_plan_hash
               ,qt.query_sql_text
-              ,qp.query_plan
+              ,TRY_CONVERT(XML, qp.query_plan) as QueryPlan
               ,rs.runtime_stats_interval_id
               ,rs.execution_type
               ,rs.execution_type_desc
