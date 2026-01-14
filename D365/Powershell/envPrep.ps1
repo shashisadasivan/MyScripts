@@ -11,3 +11,7 @@ Add-MpPreference -ExclusionPath "K:\AosService\WebRoot"
 Add-MpPreference -ExclusionPath '%userprofile%\Documents\IISExpress'
 Add-MpPreference -ExclusionPath '%userprofile%\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations'
 Add-MpPreference -ExclusionPath 'C:\Program Files\Common Files\Microsoft Shared\Office16\mso20win32client.dll'
+
+# To check for hat is causing : https://learn.microsoft.com/en-us/defender-endpoint/tune-performance-defender-antivirus#using-performance-analyzer
+# New-MpPerformanceRecording -RecordTo C:\Temp\msmpengRecord.etl
+# Get-MpPerformanceReport -Path C:\Temp\msmpengRecord.etl -TopFiles 3 -TopScansPerFile 10
