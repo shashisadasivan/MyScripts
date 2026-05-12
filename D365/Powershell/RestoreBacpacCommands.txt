@@ -2,7 +2,7 @@
 # dependency of d365fo.tools installed in the machine
 
 #Set the variables here - Edit to suit your needs
-$dbName = "axdb_sandbox_20231227" # The db that is being downloaded
+$dbName = "axdb_sandbox_" + (Get-Date -Format yyyyMMdd) # The db that is being downloaded
 
 $dbFilePath = "I:\bacpac\"+$dbName+".bacpac" # the folder where the bacpac will be downloaded to
 
