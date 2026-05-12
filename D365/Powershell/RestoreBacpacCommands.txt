@@ -6,7 +6,7 @@ $dbName = "axdb_sandbox_" + (Get-Date -Format yyyyMMdd) # The db that is being d
 
 $dbFilePath = "I:\bacpac\"+$dbName+".bacpac" # the folder where the bacpac will be downloaded to
 
-$oldDbSuffix = "_20231227" # the suffix of the current AxDb database that after the switch is complete
+$oldDbSuffix = "_DEV_" + (Get-Date -Format yyyyMMdd) #"_20231227" # the suffix of the current AxDb database that after the switch is complete
 
 # Make sure AzCopy is installed
 Invoke-D365InstallAzCopy
